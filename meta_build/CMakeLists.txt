@@ -50,10 +50,10 @@ if(UNIX)
 endif()
 
 if(WIN32)
-  set(BLAS_LIBRARIES "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/mkl_core.lib")
-  list(APPEND BLAS_LIBRARIES "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/mkl_intel_lp64.lib"
-                             "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64/mkl_sequential.lib")
-  set(LAPACK_INCLUDE_DIR "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include")
+  set(BLAS_LIBRARIES "%CMAKE_LIBRARY_PATH%/mkl_core.lib")
+  list(APPEND BLAS_LIBRARIES "%CMAKE_LIBRARY_PATH%/mkl_intel_lp64.lib"
+                             "%CMAKE_LIBRARY_PATH%/mkl_sequential.lib")
+  set(LAPACK_INCLUDE_DIR "%CMAKE_INCLUDE_PATH%")
 endif()
 
 
