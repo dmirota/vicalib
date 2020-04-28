@@ -31,7 +31,6 @@ jobs:
     - name: "Windows"
       os: windows
       before_install:
-        - choco update
         - choco install ninja dotnetcore-sdk
         - dotnet add package intelmkl.devel.win-x64 --version 2020.1.216
         - dotnet add package intelipp.devel.win-x64 --version 2020.1.216
