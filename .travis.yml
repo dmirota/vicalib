@@ -1,26 +1,63 @@
 language: cpp
-
-os:
-  - linux
-  - osx
-  - windows
-
-compiler:
-  - gcc
-  - clang
-
-addons:
-  apt:
-    packages:
-      - ninja-build
-
-before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install ninja   ; fi
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco update          ; fi
-  - if [ "$TRAVIS_OS_NAME" = "windows" ]; then choco install ninja   ; fi
+os: linux
+dist: xenial
+jobs:
+  include:
+    - name: "Xenial Linux"
+      os: linux
+      compiler: gcc
+      addons:
+        apt:
+          packages:
+            - ninja-build
+      before_script:
+        - curl https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB | sudo apt-key add -
+        - echo "deb https://apt.repos.intel.com/mkl all main" | sudo tee -a /etc/apt/sources.list
+        - echo "deb https://apt.repos.intel.com/ipp all main" | sudo tee -a /etc/apt/sources.list
+        - sudo apt-get -qq update
+        - sudo apt-get -y install intel-mkl-64bit-2020.0-088 intel-ipp-64bit-2020.0-088
+      env:
+       - LIBRARY_PATH="$LIBRARY_PATH:/opt/intel/ipp/lib/intel64:/opt/intel/mkl/lib/intel64"
+       - CMAKE_INCLUDE_PATH="/opt/intel/mkl/include"
+       - CMAKE_LIBRARY_PATH="/opt/intel/ipp/lib/intel64:/opt/intel/mkl/lib/intel64:/opt/intel/lib/intel64"
+       - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CMAKE_LIBRARY_PATH"
+       - CPATH="$CPATH:/opt/intel/mkl/include"
+    - name: "macOS"
+      os: osx
+      compiler: clang
+      before_install:
+        - brew update
+        - brew install ninja
+    - name: "Windows"
+      os: windows
+      before_install:
+        - choco update
+        - choco install ninja dotnetcore-sdk
+        - dotnet add package intelmkl.devel.win-x64 --version 2020.1.216
+        - dotnet add package intelipp.devel.win-x64 --version 2020.1.216
+      env:
+       - CMAKE_INCLUDE_PATH="C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include"
+       - CMAKE_LIBRARY_PATH="C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64"
+       - LIB="%LIB%;%CMAKE_LIBRARY_PATH%"
+       - INCLUDE="%INCLUDE%;C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include"
 
 script:
   - mkdir build_dir
   - cmake -G Ninja -Bbuild_dir -Hmeta_build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_GUI=False
   - cmake --build build_dir --config RelWithDebInfo
+
+
+# linux
+#  add intel apt repo for mkl
+# install mkl
+# config env
+
+#windows
+# use choco to install dotnet cli
+# use dotnet cli nuget to install mkl
+# config env
+
+#mac
+# wget mkl using url
+#install mkl
+# config env
