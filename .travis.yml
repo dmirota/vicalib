@@ -32,8 +32,8 @@ jobs:
       os: windows
       before_install:
         - choco install ninja paket
+        - paket init
         - paket add intelmkl.devel.win-x64 --version 2020.1.216
-        - paket add intelipp.devel.win-x64 --version 2020.1.216
       env:
        - CMAKE_INCLUDE_PATH="C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/include"
        - CMAKE_LIBRARY_PATH="C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/mkl/lib/intel64"
