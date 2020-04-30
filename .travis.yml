@@ -20,6 +20,7 @@ jobs:
        - GENERATOR=Ninja
        - MKL_INCLUDE_PATH=/opt/intel/mkl/include
        - MKL_LIBRARY_PATH=/opt/intel/mkl/lib/intel64
+       - IPP_LIBRARY_PATH=/opt/intel/ipp/lib/intel64
     - name: "macOS"
       os: osx
       compiler: clang
@@ -44,8 +45,8 @@ jobs:
 
 script:
   - mkdir build_dir
-  - cmake -G "$GENERATOR" -Bbuild_dir -Hmeta_build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_GUI=False
-  - cmake --build build_dir --config RelWithDebInfo
+  - cmake -G "$GENERATOR" -Bbuild_dir -Hmeta_build -DCMAKE_BUILD_TYPE=Release -DBUILD_GUI=False
+  - cmake --build build_dir --config Release
 
 
 # linux
