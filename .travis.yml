@@ -5,6 +5,7 @@ jobs:
   include:
     - name: "Xenial Linux"
       os: linux
+      cache: ccache
       compiler: gcc
       addons:
         apt:
@@ -22,6 +23,9 @@ jobs:
         - sudo apt-get -y install intel-mkl-64bit-2020.0-088
     - name: "MacOS"
       os: osx
+      cache:
+        directories:
+          - $HOME/.ccache
       osx_image: xcode10.2 # macOS 14 required for 2020.1.216 MKL
       compiler: clang
       env:
@@ -31,7 +35,8 @@ jobs:
         - MKL_INCLUDE_PATH=/opt/intel/mkl/include
         - MKL_LIBRARY_PATH=/opt/intel/compilers_and_libraries_$MKL_VERSION/mac/mkl/lib
       before_install:
-        - brew install ninja
+        - brew install ninja ccache
+        - export PATH="/usr/local/opt/ccache/libexec:$PATH"
         - curl http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16525/$MKL_NAME.dmg --output $MKL_NAME.dmg
         - sudo hdiutil attach $MKL_NAME.dmg
         - sed 's/=decline/=accept/g' $(find /Volumes/$MKL_NAME -name "silent.cfg" -print) > ~/silent.cfg
@@ -39,6 +44,9 @@ jobs:
         - sudo hdiutil detach /Volumes/$MKL_NAME
     - name: "Windows"
       os: windows
+      cache:
+        directories:
+          - $LOCALAPPDATA/Mozilla/sccache
       env:
        - GENERATOR="Visual Studio 14 2015 Win64"  # VS2015 required OpenCV 3.2
        - MKL_VERSION=2020.1.216
@@ -48,7 +56,7 @@ jobs:
       before_install:
         # https://chocolatey.org/packages/Paket
         # microsoft-visual-cpp-build-tools for Visual Studio 2015
-        - choco install paket microsoft-visual-cpp-build-tools
+        - choco install paket microsoft-visual-cpp-build-tools sccache
         - paket init
         # https://www.nuget.org/packages/intelmkl.static.win-x64/
         - paket add $MKL_NAME --version $MKL_VERSION
