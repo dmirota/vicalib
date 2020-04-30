@@ -26,8 +26,12 @@ jobs:
         - brew update
         - brew install ninja
         - curl http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16525/m_mkl_2020.1.216.dmg --output m_mkl_2020.1.216.dmg
+        - ls -alh .
         - sudo hdiutil attach m_mkl_2020.1.216.dmg
         - sed 's/=decline/=accept/g' $(find /Volumes/m_mkl_2020.1.216 -name "silent.cfg" -print) > ~/slient.cfg
+        - cat ~/slient.cfg
+        - ls -alh $(dirname $(find /Volumes/m_mkl_2020.1.216 -name "silent.cfg" -print))
+        - cat $(find /Volumes/m_mkl_2020.1.216 -name "install.sh" -print)
         - sudo $(find /Volumes/m_mkl_2020.1.216 -name "install.sh" -print) --slient ~/slient.cfg
         - sudo hdiutil detach /Volumes/m_mkl_2020.1.216
       env:
