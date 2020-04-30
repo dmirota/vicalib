@@ -26,7 +26,7 @@ jobs:
       before_install:
         - brew update
         - brew install ninja
-        - curl http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16525/m_mkl_2020.1.216.dmg
+        - curl http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16525/m_mkl_2020.1.216.dmg --output m_mkl_2020.1.216.dmg
         - sudo hdiutil attach m_mkl_2020.1.216.dmg
         - ls /Volumes/m_mkl_2020.1.216
       env:
@@ -44,7 +44,7 @@ jobs:
 
 script:
   - mkdir build_dir
-  - cmake -G $GENERATOR -Bbuild_dir -Hmeta_build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_GUI=False
+  - cmake -G "$GENERATOR" -Bbuild_dir -Hmeta_build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_GUI=False
   - cmake --build build_dir --config RelWithDebInfo
 
 
