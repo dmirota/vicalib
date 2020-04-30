@@ -27,8 +27,8 @@ jobs:
         - brew install ninja
         - curl http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16525/m_mkl_2020.1.216.dmg --output m_mkl_2020.1.216.dmg
         - sudo hdiutil attach m_mkl_2020.1.216.dmg
-        - sed 's/=decline/=accept/g' /Volumes/m_mkl_2020.1.216/m_mkl_2020.1.216.app/Contents/MacOS/slient.cfg > ~/slient.cfg
-        - sudo /Volumes/m_mkl_2020.1.216/m_mkl_2020.1.216.app/Contents/MacOS/install.sh --slient ~/slient.cfg
+        - sed 's/=decline/=accept/g' $(find /Volumes/m_mkl_2018.2.164 -name "silent.cfg" -print) > ~/slient.cfg
+        - sudo $(find /Volumes/m_mkl_2018.2.164 -name "install.sh" -print) --slient ~/slient.cfg
         - sudo hdiutil detach /Volumes/m_mkl_2020.1.216
       env:
         - GENERATOR=Ninja
