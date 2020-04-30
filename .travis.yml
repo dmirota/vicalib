@@ -32,7 +32,7 @@ jobs:
         - cat ~/slient.cfg
         - ls -alh $(dirname $(find /Volumes/m_mkl_2020.1.216 -name "silent.cfg" -print))
         - cat $(find /Volumes/m_mkl_2020.1.216 -name "install.sh" -print)
-        - sudo sh -x $(find /Volumes/m_mkl_2020.1.216 -name "install.sh" -print) --slient ~/slient.cfg
+        - sudo sh -x $(find /Volumes/m_mkl_2020.1.216 -name "install.sh" -print) --slient ~/slient.cfg --ignore-cpu
         - sudo hdiutil detach /Volumes/m_mkl_2020.1.216
       env:
         - GENERATOR=Ninja
