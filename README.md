@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/dmirota/vicalib.svg?branch=master)](https://travis-ci.com/dmirota/vicalib)
+
 vicalib
 =======
 
