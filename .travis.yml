@@ -17,34 +17,34 @@ jobs:
         - sudo apt-get -qq update
         - sudo apt-get -y install intel-mkl-64bit-2020.0-088 intel-ipp-64bit-2020.0-088
       env:
-       - LIBRARY_PATH="$LIBRARY_PATH:/opt/intel/ipp/lib/intel64:/opt/intel/mkl/lib/intel64"
-       - CMAKE_INCLUDE_PATH="/opt/intel/mkl/include"
-       - CMAKE_LIBRARY_PATH="/opt/intel/ipp/lib/intel64:/opt/intel/mkl/lib/intel64:/opt/intel/lib/intel64"
-       - LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$CMAKE_LIBRARY_PATH"
-       - CPATH="$CPATH:$CMAKE_INCLUDE_PATH"
+       - GENERATOR=Ninja
+       - MKL_INCLUDE_PATH=/opt/intel/mkl/include
+       - MKL_LIBRARY_PATH=/opt/intel/mkl/lib/intel64
     - name: "macOS"
       os: osx
       compiler: clang
       before_install:
         - brew update
         - brew install ninja
+        - curl http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16525/m_mkl_2020.1.216.dmg
+        - sudo hdiutil attach m_mkl_2020.1.216.dmg
+        - ls /Volumes/m_mkl_2020.1.216
+      env:
+        - GENERATOR=Ninja
     - name: "Windows"
       os: windows
       before_install:
-        - choco install ninja paket
+        - choco install paket
         - paket init
         - paket add intelmkl.static.win-x64 --version 2020.1.216
       env:
-       - CMAKE_INCLUDE_PATH="C:/Users/travis/.nuget/packages/intelmkl.static.win-x64/2020.1.216/lib/native/include"
-       - CMAKE_LIBRARY_PATH="C:/Users/travis/.nuget/packages/intelmkl.static.win-x64/2020.1.216/lib/native/win-x64"
-       - LIB="%LIB%;%CMAKE_LIBRARY_PATH%"
-       - INCLUDE="%INCLUDE%;%CMAKE_INCLUDE_PATH%"
-       - LIBRARY_PATH="%LIBRARY_PATH%:%CMAKE_LIBRARY_PATH%"
-       - CPATH="%CPATH%:%CMAKE_INCLUDE_PATH%"
+       - GENERATOR="Visual Studio 15 2017 Win64"
+       - MKL_INCLUDE_PATH=C:/Users/travis/.nuget/packages/intelmkl.static.win-x64/2020.1.216/lib/native/include
+       - MKL_LIBRARY_PATH=C:/Users/travis/.nuget/packages/intelmkl.static.win-x64/2020.1.216/lib/native/win-x64
 
 script:
   - mkdir build_dir
-  - cmake -G Ninja -Bbuild_dir -Hmeta_build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_GUI=False
+  - cmake -G $GENERATOR -Bbuild_dir -Hmeta_build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_GUI=False
   - cmake --build build_dir --config RelWithDebInfo
 
 
