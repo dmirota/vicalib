@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.4)
 project(vicalib-cmakeall)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
-find_package(CMakeAll REQUIRED)
+find_package(CMakeAll 1.2 REQUIRED)
 
 SET(CMakeAll_VERIFY_URLS OFF CACHE BOOL "" FORCE)
 SET(CMakeAll_RESOLVE_DEPENDENCIES ON CACHE BOOL "" FORCE)
